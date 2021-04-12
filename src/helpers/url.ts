@@ -11,9 +11,9 @@ function encode(val: string): string {
     .replace(/%5D/gi, ']')
 }
 
-export function buildUrl(url: string, params?: any) {
+export function buildUrl(url?: string, params?: any) {
   if (!params) {
-    return url;
+    return url || '';
   }
 
   const parts: string[] = [];
@@ -42,7 +42,7 @@ export function buildUrl(url: string, params?: any) {
   const serializedParams = parts.join('&');
 
   // 如果有url中带有hash, 截取掉hash
-  if (serializedParams) {
+  if (serializedParams && url) {
     const markIndex = url.indexOf('#');
     if (markIndex > -1) {
       url = url.slice(0, markIndex);
@@ -50,5 +50,5 @@ export function buildUrl(url: string, params?: any) {
     url += (url.indexOf('?') ? '?' : '&') + serializedParams;
   }
 
-  return url;
+  return url || '';
 }

@@ -47,6 +47,15 @@ router.post('/base/buffer', function(req, res) {
   })
 })
 
+router.get('/extend/user', function(req, res) {
+  res.json({
+    result: {
+      name: 'wq',
+      age: 27
+    }
+  })
+});
+
 app.use(router)
 
 
