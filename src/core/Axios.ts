@@ -13,10 +13,13 @@ import InterceptorManager from './interceptor';
  * Axios 类，用来实现接口定义的公共方法.
  * */
 export default class Axios {
+  // 默认配置
+  defaults: AxiosRequestConfig
   // 拦截器
   interceptors: Interceptors
 
-  constructor () {
+  constructor (initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig;
     this.interceptors = {
       request: new InterceptorManager<AxiosRequestConfig>(),
       response: new InterceptorManager<AxiosResponse>()
