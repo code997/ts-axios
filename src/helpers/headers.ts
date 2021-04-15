@@ -1,4 +1,5 @@
-import { isObject } from './util';
+import { Method } from '../types';
+import { deepMerge, isObject } from './util';
 
 // headers属性名规范化
 function normalizeHeaderName (headers: any, normalizeName: string): void {
@@ -58,4 +59,22 @@ export function parseHeaders(headers: string): any {
   });
 
   return parsed;
+}
+
+// 拍平默认headers与自定义header的数据
+export function flattenHeaders(headers: any, method: Method): any {
+  console.log(headers, 'headers===');
+  if (!headers) {
+    return headers;
+  }
+
+  headers = deepMerge(headers.common || {}, headers[method] || {}, headers);
+
+  const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common'];
+
+  methodsToDelete.forEach((method) => {
+    delete headers[method];
+  })
+
+  return headers;
 }

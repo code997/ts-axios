@@ -91,6 +91,10 @@ import axios, { AxiosError } from '../../src/index';
 //   url: '/base/buffer',
 //   data: arr
 // })
+
+axios.defaults.headers.common['common1'] = 'common1';
+axios.defaults.headers.get['get1'] = 'get1';
+
 axios.interceptors.request.use(config => {
   if (config.params) {
     config.params.request1 = 'request1'
@@ -116,9 +120,12 @@ axios.interceptors.response.use(response => {
   return response;
 });
 
-axios('/simple/get', {
+axios.get('/simple/get', {
   params: {
     a: 1
+  },
+  headers: {
+    name: 'WQ'
   }
 }).then((res) => {
   console.log('axios.get1', res);

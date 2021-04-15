@@ -1,3 +1,4 @@
+import { isObject, deepMerge } from "../helpers/util";
 import { AxiosRequestConfig } from "../types";
 
 const strats = Object.create(null);
@@ -21,6 +22,25 @@ const stratKeysFromVal2 = ['url', 'params', 'data'];
 stratKeysFromVal2.forEach(key => {
   strats[key] = formVal2Strat;
 })
+
+// 复杂对象合并策略
+function deepMergeStrat(val1: any, val2: any): any {
+  if (isObject(val2)) {
+    return deepMerge(val1, val2);
+  } else if (typeof val2 !== 'undefined') {
+    return val2;
+  } else if (isObject(val1)) {
+    return deepMerge(val1);
+  } else if (typeof val1 !== 'undefined') {
+    return val1;
+  }
+}
+
+const stratKeysDeepMerge = ['headers'];
+
+stratKeysDeepMerge.forEach((key) => {
+  strats[key] = deepMergeStrat;
+});
 
 export default function mergeConfig(
   config1: AxiosRequestConfig,

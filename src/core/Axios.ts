@@ -8,6 +8,7 @@ import {
 } from '../types';
 import dispatchRequest from './dispatchRequest';
 import InterceptorManager from './interceptor';
+import mergeConfig from './mergeConfig';
 
 /* *
  * Axios 类，用来实现接口定义的公共方法.
@@ -27,6 +28,9 @@ export default class Axios {
   }
 
   request(url: any, config?: any): AxiosPromise {
+    // 合并配置项
+    config = mergeConfig(this.defaults, config);
+
     if (typeof url === 'string') {
       if (!config) {
         config = {}
