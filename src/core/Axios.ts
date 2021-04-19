@@ -28,16 +28,15 @@ export default class Axios {
   }
 
   request(url: any, config?: any): AxiosPromise {
-    // 合并配置项
-    config = mergeConfig(this.defaults, config);
-
     if (typeof url === 'string') {
       if (!config) {
-        config = {}
+        // 合并配置项
+        config = mergeConfig(this.defaults, {});
       }
       config.url = url;
     } else {
-      config = url;
+      // 合并配置项
+      config = mergeConfig(this.defaults, url);
     }
 
     const chain: PromiseChain<any>[] = [{

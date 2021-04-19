@@ -4,7 +4,7 @@ export function isDate (val: any) {
   return toString.call(val) === '[object Date]';
 }
 
-export function isObject(val: any) {
+export function isPlainObject(val: any) {
   return val !== null && toString.call(val) === '[object Object]';
 }
 
@@ -26,8 +26,8 @@ export function deepMerge(...objs: any[]) {
     if (obj) {
       Object.keys(obj).forEach((key) => {
         const val = obj[key];
-        if (isObject(val)) {
-          if (isObject(result[key])) {
+        if (isPlainObject(val)) {
+          if (isPlainObject(result[key])) {
             result[key] = deepMerge(result[key], val);
           } else {
             result[key] = val;
@@ -44,7 +44,7 @@ export function deepMerge(...objs: any[]) {
 
 export default {
   isDate,
-  isObject,
+  isPlainObject,
   isArray,
   extend,
   deepMerge

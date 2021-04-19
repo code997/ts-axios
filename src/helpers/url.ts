@@ -32,7 +32,7 @@ export function buildUrl(url?: string, params?: any) {
     values.forEach(val => {
       if (util.isDate(val)) {
         val = val.toISOString();
-      } else if (util.isObject(val)) {
+      } else if (util.isPlainObject(val)) {
         val = JSON.stringify(val);
       }
       parts.push(`${encode(key)}=${encode(val)}`);

@@ -1,5 +1,5 @@
 import { Method } from '../types';
-import { deepMerge, isObject } from './util';
+import { deepMerge, isPlainObject } from './util';
 
 // headers属性名规范化
 function normalizeHeaderName (headers: any, normalizeName: string): void {
@@ -17,7 +17,7 @@ export function processHeaders(headers: any, data: any):any {
   normalizeHeaderName(headers, 'Content-Type');
 
   // 普通data对象，且没有传入Content-Type,设置默认
-  if (isObject(data)) {
+  if (isPlainObject(data)) {
     if (headers && !headers['Content-Type']) {
       headers['Content-Type'] = 'application/json;charset=utf-8';
     }
@@ -63,7 +63,6 @@ export function parseHeaders(headers: string): any {
 
 // 拍平默认headers与自定义header的数据
 export function flattenHeaders(headers: any, method: Method): any {
-  console.log(headers, 'headers===');
   if (!headers) {
     return headers;
   }

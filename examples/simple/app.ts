@@ -1,4 +1,5 @@
 import axios, { AxiosError } from '../../src/index';
+import { AxiosTransformer } from '../../src/types';
 
 // axios.request({
 //   method: 'get',
@@ -99,28 +100,31 @@ axios.interceptors.request.use(config => {
   if (config.params) {
     config.params.request1 = 'request1'
   }
-  console.log('request1')
   return config;
 });
 axios.interceptors.request.use(config => {
   if (config.params) {
     config.params.request2 = 'request2'
   }
-  console.log('request2')
   return config;
 });
 axios.interceptors.response.use(response => {
   response.data.response1 = []
-  console.log('response1')
   return response;
 });
 axios.interceptors.response.use(response => {
   response.data.response2 = []
-  console.log('response2')
   return response;
 });
 
 axios.get('/simple/get', {
+  transformResponse: [
+    ...(axios.defaults.transformResponse as AxiosTransformer[]),
+    function (data) {
+      data.abc = 'efg';
+      return data;
+    }
+  ],
   params: {
     a: 1
   },
@@ -139,28 +143,28 @@ axios({
   console.log('axios.get2', res);
 });
 
-interface ResponseData<T = any> {
-  code: number
-  result: T
-  message: string
-}
+// interface ResponseData<T = any> {
+//   code: number
+//   result: T
+//   message: string
+// }
 
-interface User {
-  name: string
-  age: number
-}
+// interface User {
+//   name: string
+//   age: number
+// }
 
-function getUser<T>() {
-  return axios<ResponseData<T>>('/extend/user')
-    .then((res) => res.data);
-}
+// function getUser<T>() {
+//   return axios<ResponseData<T>>('/extend/user')
+//     .then((res) => res.data);
+// }
 
-async function test() {
-  const user = await getUser<User>();
-  console.log(user);
-  if (user) {
-    console.log(user.result.name);
-  }
-}
+// async function test() {
+//   const user = await getUser<User>();
+//   console.log(user);
+//   if (user) {
+//     console.log(user.result.name);
+//   }
+// }
 
-test();
+// test();

@@ -1,10 +1,10 @@
-import { isObject, deepMerge } from "../helpers/util";
+import { isPlainObject, deepMerge } from "../helpers/util";
 import { AxiosRequestConfig } from "../types";
 
 const strats = Object.create(null);
 
 function defaultStrat (val1:any, val2:any):any {
-  return typeof val2 !== undefined ? val2 : val1;
+  return val2 !== undefined ? val2 : val1;
 }
 
 /**
@@ -25,11 +25,11 @@ stratKeysFromVal2.forEach(key => {
 
 // 复杂对象合并策略
 function deepMergeStrat(val1: any, val2: any): any {
-  if (isObject(val2)) {
+  if (isPlainObject(val2)) {
     return deepMerge(val1, val2);
   } else if (typeof val2 !== 'undefined') {
     return val2;
-  } else if (isObject(val1)) {
+  } else if (isPlainObject(val1)) {
     return deepMerge(val1);
   } else if (typeof val1 !== 'undefined') {
     return val1;
@@ -44,7 +44,7 @@ stratKeysDeepMerge.forEach((key) => {
 
 export default function mergeConfig(
   config1: AxiosRequestConfig,
-  config2?: AxiosRequestConfig
+  config2?: any
 ): AxiosRequestConfig {
   if (!config2) {
     config2 = {}
@@ -57,7 +57,7 @@ export default function mergeConfig(
   }
 
   for (let key in config1) {
-    if (!config1[key]) {
+    if (!config2[key]) {
       mergeField(key);
     }
   }
