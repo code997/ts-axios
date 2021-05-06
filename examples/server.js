@@ -27,7 +27,9 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const router = express.Router();
 
 router.get('/simple/get', function(req, res) {
-  res.json(req.query);
+  setTimeout(() => {
+    res.json(req.query);
+  }, 1000)
 })
 
 router.post('/base/post', function(req, res) {

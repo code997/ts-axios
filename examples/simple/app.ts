@@ -117,6 +117,9 @@ axios.interceptors.response.use(response => {
   return response;
 });
 
+const CancelToken = axios.CancelToken;
+let cancel;
+
 axios.get('/simple/get', {
   transformResponse: [
     ...(axios.defaults.transformResponse as AxiosTransformer[]),
@@ -125,23 +128,62 @@ axios.get('/simple/get', {
       return data;
     }
   ],
+  cancelToken: new CancelToken(function(c) {
+    cancel = c;
+  }),
   params: {
     a: 1
   },
   headers: {
     name: 'WQ'
-  }
+  },
 }).then((res) => {
   console.log('axios.get1', res);
+}).catch((e) => {
+  console.log(axios.isCancel(e), 'isCancel');
+  console.log(e.message, 'e.message');
 });
+
+cancel('取消了请求');
+
+const CancelToken2 = axios.CancelToken;
+const source = CancelToken2.source();
 axios({
+  url: '/simple/get',
+  params: {
+    a: 2
+  },
+  cancelToken: source.token
+}).then((res) => {
+  console.log('axios.get2', res);
+}).catch((e) => {
+  console.log(axios.isCancel(e), 'isCancel');
+  console.log(e.message, 'e.message');
+});
+
+source.cancel('CancelToken2 取消请求');
+axios({
+  url: '/simple/get',
+  params: {
+    a: 2
+  },
+  cancelToken: source.token
+}).then((res) => {
+  console.log('axios.get2', res);
+}).catch((e) => {
+  console.log(axios.isCancel(e), 'isCancel');
+  console.log(e.message, 'e.message');
+});
+
+const instance = axios.create()
+instance({
   url: '/simple/get',
   params: {
     a: 2
   }
 }).then((res) => {
-  console.log('axios.get2', res);
-});
+  console.log(res);
+})
 
 // interface ResponseData<T = any> {
 //   code: number

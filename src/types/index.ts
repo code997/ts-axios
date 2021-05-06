@@ -1,3 +1,4 @@
+import axios from '../axios';
 import InterceptorManager from '../core/interceptor';
 
 // method 允许传入的合法字符串
@@ -21,6 +22,7 @@ export interface AxiosRequestConfig {
   [propName: string]: any
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
+  cancelToken?: CancelToken
 }
 
 export interface AxiosTransformer {
@@ -55,6 +57,7 @@ export interface AxiosError extends Error {
   isAxiosError: boolean
 }
 
+// Axios
 export interface Axios {
   defaults: AxiosRequestConfig
 
@@ -83,6 +86,14 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config?: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+
+  CancelToken: CancelToken
+  Cancel: CancelStatic
+  isCancel: (value: any) => boolean
+}
+
 // 拦截器定义
 export interface AxiosInterceptorManager<T> {
   use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
@@ -107,4 +118,42 @@ export interface Interceptors {
 export interface PromiseChain<T> {
   resolved: ResolvedFn<T> | ((config: AxiosRequestConfig) => AxiosPromise<T>)
   rejected?: RejectedFn
+}
+
+// CancelToken实例类
+export interface CancelToken {
+  promise: Promise<Cancel>
+  reason?: Cancel
+
+  throwIfRequested(): void
+}
+// 取消方法的接口定义
+export interface Canceler {
+  (message?: string): void
+}
+// 是CancelToken 类构造函数参数的接口定义
+export interface CancelExecutor {
+  (canceler: Canceler): void
+}
+
+// CancelToken 类静态方法
+export interface CancelTokenSource {
+  token: CancelToken
+  cancel: Canceler
+}
+
+// CancelToken 类的类型
+export interface CancelTokenStatic {
+  new (executor: CancelExecutor): CancelToken
+  source(): CancelTokenSource
+}
+
+// CancelStatic 返回值
+export interface Cancel {
+  message?: string
+}
+
+// axios.cancel方法定义
+export interface CancelStatic {
+  new (message?: string): Cancel
 }

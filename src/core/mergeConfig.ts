@@ -7,10 +7,10 @@ function defaultStrat (val1:any, val2:any):any {
   return val2 !== undefined ? val2 : val1;
 }
 
-/**
+/* *
  * 只接受自定义配置合并策略
  * url、params、data,和每个请求强相关，默认配置没有意义，只从自定义中配置中获取
- **/
+ * */
 function formVal2Strat(val1: any, val2: any): any {
   if (typeof val2 !== 'undefined') {
     return val2;
