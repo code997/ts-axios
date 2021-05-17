@@ -16,7 +16,8 @@ export default function xhr(config: AxiosRequestConfig):AxiosPromise {
       cancelToken,
       withCredentials,
       xsrfCookieName,
-      xsrfHeaderName
+      xsrfHeaderName,
+      validateStatus
     } = config;
 
     const request = new XMLHttpRequest();
@@ -92,7 +93,7 @@ export default function xhr(config: AxiosRequestConfig):AxiosPromise {
 
     // 正常的请求,往往会返回200-300之间的状态码
     function handleResponse(response: AxiosResponse) {
-      if (response.status >= 200 && response.status < 300) {
+      if (!validateStatus || validateStatus(response.status)) {
         resolve(response);
       } else {
         reject(createError(

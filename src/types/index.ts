@@ -22,10 +22,11 @@ export interface AxiosRequestConfig {
   [propName: string]: any
   transformRequest?: AxiosTransformer | AxiosTransformer[]
   transformResponse?: AxiosTransformer | AxiosTransformer[]
-  cancelToken?: CancelToken,
-  withCredentials?: Boolean,
-  xsrfCookieName?: string,
+  cancelToken?: CancelToken
+  withCredentials?: Boolean
+  xsrfCookieName?: string
   xsrfHeaderName?: string
+  validateStatus?: (status: number) => Boolean
 }
 
 export interface AxiosTransformer {
